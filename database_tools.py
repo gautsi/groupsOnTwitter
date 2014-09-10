@@ -1,6 +1,11 @@
 from peewee import *
 
-mysql_db = MySQLDatabase(user='gautsi', password='gautsi', host = '173.255.208.109', database = 'groups_on_twitter', port=3306)
+bloop = 'gautsi'
+bleep = 'gautsi'
+dloop = '173.255.208.109'
+dleep = 'groups_on_twitter'
+
+mysql_db = MySQLDatabase(user= bloop, password= bleep, host = dloop, database = dleep, port=3306)
 
 
 class BaseModel(Model):

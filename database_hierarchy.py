@@ -1,29 +1,24 @@
-import psycopg2
+import pymysql
+
+mysql_db = pymysql.connect(user='gautsi', passwd='gautsi', host = '173.255.208.109', database = 'groups_on_twitter', port=3306)
 
 class db_sto_grad_descent:
 
-	def __init__(self, dbname = "comedians_on_twitter", username = "gautam", users = "comedians", arrows = "arrows"):
+	def __init__(self, group = 'writer'):
 
-		#save the names of the tables
-		self.users = users
-		self.arrows = arrows
+
+		#save the group name
+		self.group = group
 		
 		#connect to the database
-		self.conn = psycopg2.connect("dbname={} user={}".format(dbname, username))
-		self.cur = self.conn.cursor()
+		self.cur = mysql_db.cursor()
 
-
-		#make the rank column
-		self.cur.execute("alter table {} add column rank int default 0;".format(users))
-
-
-		#commit the changes
-		self.conn.commit()
-
+		#set the rank to 0
+		self.cur.execute("update users as u set u.rank = 0 where u.group = '{}'".format(self.group))
 
 
 		#get the number of users
-		self.cur.execute("select count(*) from {};".format(users))
+		self.cur.execute("select count(*) from users as u where u.group = '{}';".format(self.group))
 
 		result = self.cur.fetchone()
 	
@@ -31,16 +26,23 @@ class db_sto_grad_descent:
 
 
 		#get the number of arrows
-		self.cur.execute("select count(*) from {};".format(arrows))
+		self.cur.execute("select count(*) from arrows as a where a.group = '{}';".format(self.group))
 
 		result = self.cur.fetchone()
 	
 		self.num_arrows = int(result[0])
 
 
-		#which user to descend on next (modulo the number of users, plus 1)
-		self.user_number = 0
+		#which user to descend on next
+		self.cur.execute("select min(u.user_id) from users as u where u.group = '{}';".format(self.group))
 
+		result = self.cur.fetchone()
+
+		self.first_id = int(result[0])
+
+		self.user_id = self.first_id
+ 
+		#number of passes
 		self.passes = 0
 
 
@@ -48,24 +50,24 @@ class db_sto_grad_descent:
 		self.hierarchy_list = [0]
 
 		#commit the changes
-		self.conn.commit()
+		mysql_db.commit()
 
 
 
 	#one iteration of the descent algorithm
 	def descend(self):
 
-		#get the id and rank of the user to descend on
-		self.cur.execute("select id, rank from {} where my_id = {}".format(self.users, (self.user_number % self.num_users) + 1))
+		#get the rank of the user to descend on
+		self.cur.execute("select u.rank from users as u where u.user_id = {} and u.group = '{}'".format(self.user_id, self.group))
 
 		result = self.cur.fetchone()
 
-		idnumber, rank = int(result[0]), int(result[1])
+		rank = int(result[0])
 
 
 		#count the relevant in and out neighbors:
 		#out neighbors with rank <= rank + 1
-		self.cur.execute("select count(*) from {} as u, {} as a where a.follow_id = {} and u.id = a.lead_id and u.rank <= {} + 1".format(self.users, self.arrows, idnumber, rank))
+		self.cur.execute("select count(*) from users as u, arrows as a where a.follow_id = {} and u.user_id = a.lead_id and u.rank <= {} + 1 and u.group = '{}'".format(self.user_id, rank, self.group))
 
 		result = self.cur.fetchone()
 
@@ -73,7 +75,7 @@ class db_sto_grad_descent:
 
 
 		#out neighbors with rank <= rank
-		self.cur.execute("select count(*) from {} as u, {} as a where a.follow_id = {} and u.id = a.lead_id and u.rank <= {}".format(self.users, self.arrows, idnumber, rank))
+		self.cur.execute("select count(*) from users as u, arrows as a where a.follow_id = {} and u.user_id = a.lead_id and u.rank <= {} and u.group = '{}'".format(self.user_id, rank, self.group))
 
 		result = self.cur.fetchone()
 
@@ -81,7 +83,7 @@ class db_sto_grad_descent:
 
 
 		#in neighbors with rank >= rank - 1
-		self.cur.execute("select count(*) from {} as u, {} as a where a.lead_id = {} and u.id = a.follow_id and u.rank >= {} - 1".format(self.users, self.arrows, idnumber, rank))
+		self.cur.execute("select count(*) from users as u, arrows as a where a.lead_id = {} and u.user_id = a.follow_id and u.rank >= {} - 1 and u.group = '{}'".format(self.user_id, rank, self.group))
 
 		result = self.cur.fetchone()
 
@@ -89,7 +91,7 @@ class db_sto_grad_descent:
 
 
 		#in neighbors with rank >= rank
-		self.cur.execute("select count(*) from {} as u, {} as a where a.lead_id = {} and u.id = a.follow_id and u.rank >= {}".format(self.users, self.arrows, idnumber, rank))
+		self.cur.execute("select count(*) from users as u, arrows as a where a.lead_id = {} and u.user_id = a.follow_id and u.rank >= {} and u.group = '{}'".format(self.user_id, rank, self.group))
 
 		result = self.cur.fetchone()
 
@@ -108,7 +110,7 @@ class db_sto_grad_descent:
 		if pressure_down > pressure_up and pressure_down >= 0:
 
 			#decrease the rank of this user
-			self.cur.execute("update {} set rank = {} where id = {}".format(self.users, rank - 1, idnumber))
+			self.cur.execute("update users as u set u.rank = {} where u.user_id = {}".format(rank - 1, self.user_id))
 
 
 			#add the new hierarchy score to the list
@@ -119,7 +121,7 @@ class db_sto_grad_descent:
 		elif pressure_up > pressure_down and pressure_up >= 0:
 
 			#increase the rank of this user
-			self.cur.execute("update {} set rank = {} where id = {}".format(self.users, rank + 1, idnumber))
+			self.cur.execute("update users as u set u.rank = {} where u.user_id = {}".format(rank + 1, self.user_id))
 
 			#add the new hierarchy score to the list
 			self.hierarchy_list += [self.hierarchy_list[-1] + pressure_up/float(self.num_arrows)]
@@ -129,22 +131,30 @@ class db_sto_grad_descent:
 		else:
 			self.hierarchy_list += [self.hierarchy_list[-1]]
 
-		#update the user number
-		self.user_number += 1
+		#update the user id
+		self.cur.execute("select min(u.user_id) from users as u where u.user_id > {} and u.group = '{}';".format(self.user_id, self.group))
 
-		#update passes number
-		if self.user_number > self.num_users:
-			
+		result = self.cur.fetchone()
+
+		#if at the end
+		if result[0] is None:
+
+			#update passes number
 			self.passes += 1
 			
 			print "passed! " + str(self.passes)
 
-			self.user_number = 0
+			self.user_id = self.first_id
+
+		else:
+			self.user_id = int(result[0])
+
+
 			
 				
 
 		#commit the changes
-		self.conn.commit()
+		mysql_db.commit()
 
 	#descend until a full pass through the users doesn't change the hierarchy
 	def descent(self):
@@ -163,5 +173,5 @@ class db_sto_grad_descent:
 	#close the connection
 	def close(self):
 		self.cur.close()
-		self.conn.close()
+		mysql_db.close()
 
