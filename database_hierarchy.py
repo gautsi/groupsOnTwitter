@@ -1,6 +1,11 @@
 import pymysql
 
-mysql_db = pymysql.connect(user='gautsi', passwd='gautsi', host = '173.255.208.109', database = 'groups_on_twitter', port=3306)
+bloop = 'gautsi'
+bleep = 'gautsi'
+dloop = '173.255.208.109'
+dleep = 'groups_on_twitter'
+
+mysql_db = MySQLDatabase(user= bloop, password= bleep, host = dloop, database = dleep, port=3306)
 
 class db_sto_grad_descent:
 
