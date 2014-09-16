@@ -4,10 +4,7 @@ import json
 
 # See assignment1.html instructions or README for how to get these credentials
 
-api_key = "kl0mhQq4PLMAp4sPqaNQESGfb"
-api_secret = "3twejtEjyZwY73VvFgGHxJ5ZL78aPblLPzAsbqHd1EPVOqSZrz"
-access_token_key = "382224834-gHoitSyzO4qgNDmnCrpfZuba6FsNTqmOjHaQ276D"
-access_token_secret = "p8BOSKiMDnjLbRixny8rMVEhm40T4xuAcK00YSVlC7tG0"
+#here
 
 _debug = 0
 

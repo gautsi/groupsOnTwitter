@@ -1,10 +1,7 @@
 import twittersearch as ts
 from twython import Twython
 
-#set up the twitter connection
-APP_KEY = "kl0mhQq4PLMAp4sPqaNQESGfb"
 
-APP_SECRET = "3twejtEjyZwY73VvFgGHxJ5ZL78aPblLPzAsbqHd1EPVOqSZrz"
 
 twy = Twython(APP_KEY, APP_SECRET)	
 

@@ -1,9 +1,6 @@
 import pymysql
 
-bl = 'gautsi'
-bw = 'gautsi'
-dl = '173.255.208.109'
-dw = 'groups_on_twitter'
+
 
 mysql_db = MySQLDatabase(user=bl, password=bw, host=dl, database=dw, port=3306)
 

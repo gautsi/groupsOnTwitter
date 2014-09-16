@@ -1,9 +1,6 @@
 from peewee import *
 
-bloop = 'gautsi'
-bleep = 'gautsi'
-dloop = '173.255.208.109'
-dleep = 'groups_on_twitter'
+
 
 mysql_db = MySQLDatabase(user= bloop, password= bleep, host = dloop, database = dleep, port=3306)
 
