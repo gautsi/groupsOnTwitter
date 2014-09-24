@@ -5,6 +5,8 @@ Created on Mon Sep 15 21:58:23 2014
 @author: gautam
 """
 
+import numpy as np
+
 class GenGraph:
     """A general graph."""
 
@@ -12,6 +14,8 @@ class GenGraph:
         """Initialze the object."""
 
         self.num_arrows = None
+        
+        self.vert_list = None
         
         self.hierarchy_list = [0]
         
@@ -21,7 +25,11 @@ class GenGraph:
         """Return the number of arrows."""
         
         pass
+        
+    def get_vert_list(self):
+        """Return a list of vertices."""
 
+        pass
 
     def get_rank(self, vert):
         """Return the rank of vertex vert."""
@@ -55,10 +63,23 @@ class GenGraph:
  
         pass
         
+        
+        
+
+    def descent(self, num = 1, debug = False):
+        """Run descend num times on random vertices."""
+        
+        if self.vert_list is None:
+            self.vert_list = self.get_vert_list()
+        
+        for __ in xrange(num):
+            vert = type(self.vert_list[0])(np.random.choice(self.vert_list))
+            if debug:
+                print "{}/{}: descending on {}".format(__+1, num, vert)
+            self.descend(vert, debug)
 
 
-
-    def descend(self, vert):
+    def descend(self, vert, debug = False):
         """
         Run one iteration of the descend algorithm.
 
@@ -75,6 +96,9 @@ class GenGraph:
 
         #get the rank of the vertex
         rank = self.get_rank(vert)
+
+        if debug:
+            print '*******\nDescending on {} with rank {}'.format(vert, rank)
 
         #count the relevant in and out neighbors:
         #out neighbors with rank <= rank + 1
@@ -97,12 +121,18 @@ class GenGraph:
         #if the rank of this vertex is increased by 1
         pressure_up = larger_in - small_out
         
+        if debug:
+            print 'small out {}\nsmaller out {}\nlarge in {}\nlarger in {}\npressure down {}\npressure up {}'.format(small_out, smaller_out, large_in, larger_in, pressure_down, pressure_up)
+        
         #if there is nonnegative pressure down greater
         #than the pressure up, go down
         if pressure_down > pressure_up and pressure_down >= 0:
             
             #decrease the rank of this user
             self.set_rank(vert, rank-1)
+            
+            if debug:
+                print 'rank down to {}'.format(rank - 1)
             
             #add the new hierarchy score to the list
             hier_change = pressure_down/float(self.num_arrows)
@@ -114,6 +144,9 @@ class GenGraph:
 
             #increase the rank of this user
             self.set_rank(vert, rank+1)
+            
+            if debug:
+                print 'rank up to {}'.format(rank + 1)
             
             #add the new hierarchy score to the list
             hier_change = pressure_up/float(self.num_arrows)

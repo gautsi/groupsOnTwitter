@@ -1,23 +1,14 @@
 import graphtools as gt
 
-class SageGraph(gt.GenGraph):
-    """
-    A subclass of GenGraph which wraps a Sage DiGraph object.
-    """
-    
-    def __init__(self, dg):
-        """
-        Initialize the object.
+class ListGraph(gt.GenGraph):
+    """A subclass of GenGraph for graphs given as a list of arrows."""
+
+    def __init__(self, arrows_list):
+        """Initialze the object."""
         
-        Parameters:
-        ___________
-        
-        dg: a Sage DiGraph; the graph that this object is wrapping.
-        
-        """
         gt.GenGraph.__init__(self)
-        
-        self.dg = dg
+
+        self.arrows_list = arrows_list
         
         self.vert_list = self.get_vert_list()
         
@@ -29,23 +20,36 @@ class SageGraph(gt.GenGraph):
         
     def get_num_arrows(self):
         """Return the number of arrows."""
-        return len(self.dg.edges())
-
+        
+        return len(self.arrows_list)
+    
     def get_vert_list(self):
         """Return a list of vertices."""
-        return self.dg.vertices()        
+
+        return list(set([a[0] for a in self.arrows_list] + [a[1] for a in self.arrows_list]))
+
 
     def get_rank(self, vert):
         """Return the rank of vertex vert."""
-        
+
         return self.rankdict[vert]
-    
+
     def set_rank(self, vert, newrank):
         """Set the rank of vertex vert to int newrank."""
         
         self.rankdict[vert] = newrank
-    
-    
+        
+    def neighbors_out(self, vert):
+        """return the list of out neighbors of vertex vert."""
+        
+        return [a[1] for a in self.arrows_list if a[0] == vert]
+
+    def neighbors_in(self, vert):
+        """return the list of in neighbors of vertex vert."""
+        
+        return [a[0] for a in self.arrows_list if a[1] == vert]
+
+        
     def count_neighbors(self, vert, out=True, cond=False, less=True, cutoff=0):
         """
         Return the number of neighbors of a vertex.
@@ -64,16 +68,17 @@ class SageGraph(gt.GenGraph):
         cutoff: an int; the cutoff rank for the conditional
         
         """
+ 
         num_neighbors = None
         if not cond:
-            num_neighbors = self.dg.out_degree(vert) if out else self.dg.in_degree(vert)
+            num_neighbors = len(self.neighbors_out(vert)) if out else len(self.neighbors_in(vert))
 
         else:
             if less:
-                num_neighbors = len([neigh for neigh in self.dg.neighbors_out(vert) if self.get_rank(neigh) <= cutoff])
+                num_neighbors = len([neigh for neigh in self.neighbors_out(vert) if self.get_rank(neigh) <= cutoff])
                 
             else:
-                num_neighbors = len([neigh for neigh in self.dg.neighbors_in(vert) if self.get_rank(neigh) >= cutoff])
+                num_neighbors = len([neigh for neigh in self.neighbors_in(vert) if self.get_rank(neigh) >= cutoff])
         
         return num_neighbors                
 

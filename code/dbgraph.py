@@ -1,7 +1,6 @@
 import graphtools as gt
 from sqlalchemy.sql import select
 from sqlalchemy import func
-import numpy as np
 
 class DBGraph(gt.GenGraph):
     """
@@ -31,7 +30,7 @@ class DBGraph(gt.GenGraph):
             self.acheckgroup = self.arrows.c.group == self.group
             
         self.reset_ranks()
-        self.user_list = self.get_user_list()
+
         
     def reset_ranks(self):
         """Set all ranks to zero."""
@@ -39,12 +38,6 @@ class DBGraph(gt.GenGraph):
         stmt = self.users.update().where(self.ucheckgroup).values(rank = 0)
         self.conn.execute(stmt)
         
-    def get_user_list(self):
-        """return the list of user_ids."""
-        
-        getuserids = select([self.users.c.user_id]).where(self.ucheckgroup)
-        results = self.conn.execute(getuserids)
-        return [result[0] for result in results.fetchall()]
 
     def get_num_arrows(self):
         """Return the number of arrows."""
@@ -52,6 +45,14 @@ class DBGraph(gt.GenGraph):
         countarrows = select([func.count()]).select_from(self.arrows).where(self.acheckgroup)
         result = self.conn.execute(countarrows)
         return result.fetchone()[0]
+        
+    def get_vert_list(self):
+        """return the list of user_ids."""
+        
+        getuserids = select([self.users.c.user_id]).where(self.ucheckgroup)
+        results = self.conn.execute(getuserids)
+        return [result[0] for result in results.fetchall()]
+
         
     def check_id(self, vert):
         return self.users.c.user_id == vert
@@ -106,10 +107,4 @@ class DBGraph(gt.GenGraph):
         result = self.conn.execute(finalstmt)
         return result.fetchone()[0]
         
-        
-    def descent(self, num = 1):
-        """Run descend num times on random vertices."""
-        
-        for __ in xrange(num):
-            vert = int(np.random.choice(self.user_list))
-            self.descend(vert)
+

@@ -1,4 +1,4 @@
 groupsOnTwitter
 ===============
 
-Hierarchy on twitter
+A package of tools to measure hierarchy in directed graphs.
