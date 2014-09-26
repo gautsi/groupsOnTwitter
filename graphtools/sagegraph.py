@@ -1,4 +1,4 @@
-import graphtools as gg
+import gengraph as gg
 
 class SageGraph(gg.GenGraph):
     """

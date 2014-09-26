@@ -1,4 +1,4 @@
-import graphtools as gg
+import gengraph as gg
 
 class ListGraph(gg.GenGraph):
     """A subclass of GenGraph for graphs given as a list of arrows."""
