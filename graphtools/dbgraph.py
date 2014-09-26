@@ -40,14 +40,12 @@ class DBGraph(gg.GenGraph):
         
 
     def get_num_arrows(self):
-        """Return the number of arrows."""
         
         countarrows = select([func.count()]).select_from(self.arrows).where(self.acheckgroup)
         result = self.conn.execute(countarrows)
         return result.fetchone()[0]
         
     def get_vert_list(self):
-        """return the list of user_ids."""
         
         getuserids = select([self.users.c.user_id]).where(self.ucheckgroup)
         results = self.conn.execute(getuserids)
@@ -58,37 +56,18 @@ class DBGraph(gg.GenGraph):
         return self.users.c.user_id == vert
     
     def get_rank(self, vert):
-        """Return the rank of vertex vert."""
 
         stmt = select([self.users.c.rank]).where((self.check_id(vert)) & (self.ucheckgroup))
         result = self.conn.execute(stmt)
         return result.fetchone()[0]
 
     def set_rank(self, vert, newrank):
-        """Set the rank of vertex vert to int newrank."""
         
         stmt = self.users.update().where((self.check_id(vert)) & (self.ucheckgroup)).values(rank = newrank)
         self.conn.execute(stmt)
 
         
     def count_neighbors(self, vert, out=True, cond=False, less=True, cutoff=0):
-        """
-        Return the number of neighbors of a vertex.
-        
-        Parameters
-        __________
-        
-        vert: a vertex; count this vertex's neighbors
-        
-        out: a Boolean; if True, count out neighbors, else in
-        
-        cond: a Boolean; if True, count the neighbors satisfying a condition on rank
-        
-        less: a Boolean; if True, count the neighbors with rank less than or equal to the cutoff, else more
-        
-        cutoff: an int; the cutoff rank for the conditional
-        
-        """
  
         genstmt = select([func.count()]).select_from(self.users).select_from(self.arrows)
         if out:

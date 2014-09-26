@@ -2,18 +2,21 @@
 import numpy as np
 
 class GenGraph:
-    """A general graph."""
+    """
+    A general graph.
+    
+    """
 
     def __init__(self):
         """Initialze the object."""
 
+        
         self.num_arrows = None
         
         self.vert_list = None
         
         self.hierarchy_list = [0]
         
-        self.passes = 0
 
     def get_num_arrows(self):
         """Return the number of arrows."""
@@ -21,17 +24,52 @@ class GenGraph:
         pass
         
     def get_vert_list(self):
-        """Return a list of vertices."""
+        """
+        Return a list of the vertices of the graph.
+        
+        :return: a list of vertices of the graph
+        :rtype: list
+        
+        """
 
         pass
 
+    def get_hierarchy_list(self):
+        """Return the list of hierarchy scores."""
+        
+        return self.hierarchy_list
+    
     def get_rank(self, vert):
-        """Return the rank of vertex vert."""
+        """
+        Return the rank of vertex vert.
+        
+        Parameters
+        __________
+        
+        :param vertex vert: the vertex to get the rank of
+
+        Returns
+        _______
+        
+        :return: the rank of *vert*
+        :rtype: int
+        
+        """
 
         pass
 
     def set_rank(self, vert, newrank):
-        """Set the rank of vertex vert to int newrank."""
+        """
+        Set the rank of vertex *vert* to int *newrank*.
+        
+        Parameters
+        __________
+        
+        :param vertex vert: the vertex to set the rank of
+        
+        :param int newrank: the new rank of *vert* 
+        
+        """
         
         pass
 
@@ -40,20 +78,24 @@ class GenGraph:
         """
         Count the number of neighbors of a vertex.
         
-        :param vert: the vertex to count the neighbors of 
-        :type vert: vertex
+        Parameters
+        __________
         
-        :param out: if True, count out neighbors, else in
-        :type out: Boolean
+        :param vertex vert: the vertex to count the neighbors of 
+        
+        :param Boolean out: if True, count out neighbors, else in
                 
-        :param cond: if True, count the neighbors satisfying a condition on rank
-        :type cond: Boolean
+        :param Boolean cond: if True, count the neighbors satisfying a condition on rank
         
-        :param less: if True, count the neighbors with rank less than or equal to the cutoff, else more
-        :type less: Boolean
+        :param Boolean less: if True, count the neighbors with rank less than or equal to *cutoff*, else more
         
-        :param cutoff: the cutoff rank for the conditional
-        :type cutoff: int
+        :param int cutoff: the cutoff rank for the conditional
+        
+        Returns
+        _______
+
+        :return: the number of (in or out) neighbors of *vert* (perhaps satisfying a condition on the rank)
+        :rtype: int
         
         """
  
