@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Sep 15 21:58:23 2014
-
-@author: gautam
-"""
-
 import numpy as np
 
 class GenGraph:
@@ -44,20 +38,22 @@ class GenGraph:
         
     def count_neighbors(self, vert, out=True, cond=False, less=True, cutoff=0):
         """
-        Return the number of neighbors of a vertex.
+        Count the number of neighbors of a vertex.
         
-        Parameters
-        __________
+        :param vert: the vertex to count the neighbors of 
+        :type vert: vertex
         
-        vert: a vertex; count this vertex's neighbors
+        :param out: if True, count out neighbors, else in
+        :type out: Boolean
+                
+        :param cond: if True, count the neighbors satisfying a condition on rank
+        :type cond: Boolean
         
-        out: a Boolean; if True, count out neighbors, else in
+        :param less: if True, count the neighbors with rank less than or equal to the cutoff, else more
+        :type less: Boolean
         
-        cond: a Boolean; if True, count the neighbors satisfying a condition on rank
-        
-        less: a Boolean; if True, count the neighbors with rank less than or equal to the cutoff, else more
-        
-        cutoff: an int; the cutoff rank for the conditional
+        :param cutoff: the cutoff rank for the conditional
+        :type cutoff: int
         
         """
  
