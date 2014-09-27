@@ -2,30 +2,30 @@ import gengraph as gg
 
 class SageGraph(gg.GenGraph):
     """
-    A subclass of GenGraph which wraps a Sage DiGraph object.
+    A subclass of GenGraph which wraps a `Sage DiGraph`_ object.
+    
+    .. _Sage DiGraph: http://www.sagemath.org/doc/reference/graphs/sage/graphs/digraph.html#sage.graphs.digraph.DiGraph  
+    
+    Parameters
+    __________
+    
+    :param sage.graphs.digraph.DiGraph dg: the Sage DiGraph to run descent on
+    
     """
     
     def __init__(self, dg):
-        """
-        Initialize the object.
+        """Initialize the object."""
         
-        Parameters:
-        ___________
-        
-        dg: a Sage DiGraph; the graph that this object is wrapping.
-        
-        """
         gg.GenGraph.__init__(self)
         
         self.dg = dg
         
         self.vert_list = self.get_vert_list()
         
+        #The rank dictionary; keys are the vertices
+        #and values are the ranks.
         self.rankdict = {vert : 0 for vert in self.vert_list}
-        """
-        The rank dictionary; keys are the vertices 
-        and values are the ranks.
-        """
+
         
     def get_num_arrows(self):
 

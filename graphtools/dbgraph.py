@@ -92,7 +92,6 @@ class DBGraph(gg.GenGraph):
 
         
     def count_neighbors(self, vert, out=True, cond=False, less=True, cutoff=0):
-        """See :func:`graphtools.gengraph.GenGraph.count_neighbors`."""
  
         genstmt = select([func.count()]).select_from(self.users).select_from(self.arrows)
         if out:

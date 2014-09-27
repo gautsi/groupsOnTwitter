@@ -158,7 +158,7 @@ class GenGraph:
 
     def descend(self, vert, debug = False):
         """
-        Run one iteration of the descend algorithm.
+        Run one iteration of the descent algorithm.
 
         Parameters
         __________
