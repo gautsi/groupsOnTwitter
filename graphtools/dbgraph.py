@@ -1,6 +1,79 @@
 import gengraph as gg
 from sqlalchemy.sql import select
-from sqlalchemy import func
+from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, func, create_engine
+
+def make_db(arrows_list, name=None):
+    """
+    Make a SQLite database in the correct format for :class:`DBGraph`.
+    
+    Parameters
+    __________
+    
+    :param str name: the name of the database; if no name is given, the database will be in-memory-only
+    
+    :param list arrow_list: the arrows of the graph as a list of lists of two ints, the first int representing the tail of the arrow and the second the head.
+    
+    Returns
+    _______
+    
+    :returns: the users table, arrows table and database connection as two sqlalchemy.schema.Table objects and a sqlalchemy.engine.base.Connection object, respectively
+    :rtype: tuple
+    
+    For example,
+    
+    >>> from graphtools.dbgraph import make_db
+    >>> users, arrows, conn = make_db([[1, 2], [2, 3]])
+    >>> from sqlalchemy.sql import select
+    >>> result = conn.execute(select([users]))
+    >>> result.fetchall()
+    [(1, 0), (2, 0), (3, 0)]
+    >>> result = conn.execute(select([arrows]))
+    >>> result.fetchall()
+    [(1, 1, 2), (2, 2, 3)]
+    
+    """
+    
+    #make the engine and connection
+    if name is None:
+        engine = create_engine('sqlite://')
+    else:
+        engine = create_engine('sqlite:///{}.db'.format(name))
+    
+    conn = engine.connect()
+    
+    #setup the tables    
+    metadata = MetaData()
+
+    users = Table('users', metadata, 
+        Column('user_id', Integer, primary_key=True),
+        Column('rank', Integer)
+    )
+    
+    arrows = Table('arrows', metadata,
+        Column('id', Integer, primary_key=True), 
+        Column('follow_id', Integer, ForeignKey('users.user_id')),
+        Column('lead_id', Integer, ForeignKey('users.user_id')),
+        sqlite_autoincrement=True
+    )
+    
+    #create the tables    
+    metadata.create_all(engine)
+    
+    #add the vertices
+    vertices = set([a[0] for a in arrows_list] + [a[1] for a in arrows_list])
+    
+    user_values = [{'user_id':vertex, 'rank':0} for vertex in vertices]
+    
+    conn.execute(users.insert(), user_values)
+        
+    #add the arrows
+     
+    arrow_values = [{'follow_id':arrow[0], 'lead_id':arrow[1]} for arrow in arrows_list]
+     
+    conn.execute(arrows.insert(), arrow_values)
+
+    return users, arrows, conn
+    
 
 class DBGraph(gg.GenGraph):
     """
@@ -33,6 +106,31 @@ class DBGraph(gg.GenGraph):
     
     The initializer sets all entries in **user**.\ *rank* to 0.
     
+    For example,
+    
+    >>> from graphtools.dbgraph import make_db, DBGraph
+    >>> users, arrows, conn = make_db([[1, 2], [2, 3]])
+    >>> graph = DBGraph(users=users, arrows=arrows, conn=conn)
+    >>> print graph.get_num_arrows()
+    2
+    >>> set(graph.get_vert_list()) == set([1, 2, 3])
+    True
+    >>> print graph.get_rank(1)
+    0
+    >>> graph.set_rank(3,2)
+    >>> graph.get_rank(3)
+    2
+    >>> graph.reset_ranks()
+    >>> graph.descend(2)
+    >>> graph.descent(20)
+    >>> hl = graph.hierarchy_list #get the list of hierarchy scores
+    >>> print len(hl) #descend has been run 21 times, plus the initial score
+    22
+    >>> print hl[0] #the first score is always 0
+    0
+    >>> print hl[-1] #the score after 21 descends will probably be 1.0
+    1.0
+    
     """
     
     def __init__(self, users, arrows, conn, group = None):
@@ -56,7 +154,6 @@ class DBGraph(gg.GenGraph):
 
         
     def reset_ranks(self):
-        """Set all ranks to zero."""
         
         stmt = self.users.update().where(self.ucheckgroup).values(rank = 0)
         self.conn.execute(stmt)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-class GenGraph:
+class GenGraph(object):
     """
     A graph superclass implementing the descent algorithm. Subclasses should overwrite 
     
@@ -24,7 +24,17 @@ class GenGraph:
         self.vert_list = None
         
         self.hierarchy_list = [0]
+        """
+        The list of hierarchy scores, updated\
+        with each run of descend.
         
+        """
+
+    def reset_ranks(self):
+        """Set all ranks to zero."""
+        
+        for vert in self.get_vert_list():
+            self.set_rank(vert, 0)
 
     def get_num_arrows(self):
         """
@@ -54,17 +64,6 @@ class GenGraph:
 
         pass
 
-    def get_hierarchy_list(self):
-        """
-        Return the list of hierarchy scores.
-        
-        Returns
-        _______
-        
-        :return: the list of hierarchy scores
-        :rtype: list
-        
-        """
         
         return self.hierarchy_list
     
@@ -142,7 +141,7 @@ class GenGraph:
         
         :param int num: the number of times to run :func:`descend`
         
-        :param bool debug: if True, output debug code
+        :param bool debug: if True, verbose output
         
         """
         
@@ -165,7 +164,7 @@ class GenGraph:
 
         :param vertex vert: the vertex whose rank may change
         
-        :param bool debug: if True, output debug code
+        :param bool debug: if True, verbose output
         
         """
         

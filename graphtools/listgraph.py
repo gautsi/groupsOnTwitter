@@ -11,6 +11,30 @@ class ListGraph(gg.GenGraph):
     arrow is an ordered list of 2 vertices (any type) where the first\
     vertex is the tail of the arrow and the second is the head.
     
+    We use the following simple example throughout.
+    
+    >>> from graphtools.listgraph import ListGraph
+    >>> graph = ListGraph([['a', 'b'], ['b', 'c']])
+    >>> print graph.get_num_arrows()
+    2
+    >>> set(graph.get_vert_list()) == set(['a', 'b', 'c'])
+    True
+    >>> print graph.get_rank('a')
+    0
+    >>> graph.set_rank('b',2)
+    >>> graph.get_rank('b')
+    2
+    >>> graph.reset_ranks()
+    >>> graph.descend('a')
+    >>> graph.descent(20)
+    >>> hl = graph.hierarchy_list #get the list of hierarchy scores
+    >>> print len(hl) #descend has been run 21 times, plus the initial score
+    22
+    >>> print hl[0] #the first score is always 0
+    0
+    >>> print hl[-1] #the score after 21 descends will probably be 1.0
+    1.0
+    
     Graphs with isolated vertices (vertices with no neighbors) are not\
     supported. Isolated vertices don't affect the hierarchy of the graph.  
     
@@ -53,14 +77,21 @@ class ListGraph(gg.GenGraph):
         Parameters
         __________
         
-        :param vertex vert: the vertex to count the neighbors of
+        :param vertex vert: the vertex to get the neighbors of
         
         Returns
         _______
         
-        :return: the number of out neighbors of *vert*
-        :rtype: int
+        :return: the list of out neighbors of *vert*
+        :rtype: list
         
+        For example,
+        
+        >>> graph.neighbors_out('a')
+        ['b']
+        >>> graph.neighbors_out('c')
+        []
+            
         """
         
         return [a[1] for a in self.arrows_list if a[0] == vert]
@@ -71,14 +102,21 @@ class ListGraph(gg.GenGraph):
         Parameters
         __________
         
-        :param vertex vert: the vertex to count the neighbors of
+        :param vertex vert: the vertex to get the neighbors of
         
         Returns
         _______
         
-        :return: the number of in neighbors of *vert*
-        :rtype: int
+        :return: the list of in neighbors of *vert*
+        :rtype: list
         
+        For example,
+        
+        >>> graph.neighbors_in('a')
+        []
+        >>> graph.neighbors_in('c')
+        ['b']
+
         """
 
         
