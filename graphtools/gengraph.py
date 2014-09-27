@@ -3,7 +3,15 @@ import numpy as np
 
 class GenGraph:
     """
-    A general graph.
+    A graph superclass implementing the descent algorithm. Subclasses should overwrite 
+    
+    * :func:`get_num_arrows`,
+    * :func:`get_vert_list`,
+    * :func:`get_rank`,
+    * :func:`set_rank` and
+    * :func:`count_neighbors`
+    
+    The method :func:`descent` runs the algorithm, updating the ranks of the vertices.
     
     """
 
@@ -19,13 +27,25 @@ class GenGraph:
         
 
     def get_num_arrows(self):
-        """Return the number of arrows."""
+        """
+        Return the number of arrows.
+        
+        Returns
+        _______
+        
+        :return: the number of arrows in the graph
+        :rtype: int
+        
+        """
         
         pass
         
     def get_vert_list(self):
         """
         Return a list of the vertices of the graph.
+        
+        Returns
+        _______
         
         :return: a list of vertices of the graph
         :rtype: list
@@ -35,7 +55,16 @@ class GenGraph:
         pass
 
     def get_hierarchy_list(self):
-        """Return the list of hierarchy scores."""
+        """
+        Return the list of hierarchy scores.
+        
+        Returns
+        _______
+        
+        :return: the list of hierarchy scores
+        :rtype: list
+        
+        """
         
         return self.hierarchy_list
     
@@ -83,11 +112,11 @@ class GenGraph:
         
         :param vertex vert: the vertex to count the neighbors of 
         
-        :param Boolean out: if True, count out neighbors, else in
+        :param bool out: if True, count out neighbors, else in
                 
-        :param Boolean cond: if True, count the neighbors satisfying a condition on rank
+        :param bool cond: if True, count the neighbors satisfying a condition on rank
         
-        :param Boolean less: if True, count the neighbors with rank less than or equal to *cutoff*, else more
+        :param bool less: if True, count the neighbors with rank less than or equal to *cutoff*, else more
         
         :param int cutoff: the cutoff rank for the conditional
         
@@ -105,7 +134,17 @@ class GenGraph:
         
 
     def descent(self, num = 1, debug = False):
-        """Run descend num times on random vertices."""
+        """
+        Run :func:`descend` a number of times on random vertices.
+        
+        Parameters
+        __________
+        
+        :param int num: the number of times to run :func:`descend`
+        
+        :param bool debug: if True, output debug code
+        
+        """
         
         if self.vert_list is None:
             self.vert_list = self.get_vert_list()
@@ -124,7 +163,9 @@ class GenGraph:
         Parameters
         __________
 
-        vert: the vertex whose rank may change
+        :param vertex vert: the vertex whose rank may change
+        
+        :param bool debug: if True, output debug code
         
         """
         

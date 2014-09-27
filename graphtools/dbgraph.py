@@ -4,11 +4,34 @@ from sqlalchemy import func
 
 class DBGraph(gg.GenGraph):
     """
-    A subclass of GenGraph for graphs stored in databases.
+    A subclass of GenGraph for graphs stored in databases. 
     
-    The vertices are stored in a table called users.
-    The arrows are stored in a table called arrows.
-    The vertices are identified by the value in the user_id column. 
+    The vertices are stored in a table called **users** with columns
+    
+    * *user_id* (any type) and
+    * *rank* (int)
+    
+    (the name comes from the original motivation which was Twitter user subgraphs). The table may also have a column *group* (any type) specifying the particular graph that the user belongs to if the database contains multiple graphs. If the table has no *group* column, *user_id* should be a unique identifier; if there is a *group* column, *user_id* and *group* together should be unique. 
+    
+    The arrows are stored in a table called **arrows** with columns
+    
+    * *follow_id* and 
+    * *lead_id*
+    
+    both refering to **users**.\ *user_id*. If **users** has a *group* column then **arrows** should have a corresponding *group* column.
+    
+    Parameters
+    __________
+    
+    :param sqlalchemy.schema.Table users: the table of vertices, described above
+    
+    :param sqlalchemy.schema.Table arrows: the table of arrows, described above
+    
+    :param sqlalchemy.engine.base.Connection conn: a connection to the database
+    
+    :param any group: an optional identifier, described above
+    
+    The initializer sets all entries in **user**.\ *rank* to 0.
     
     """
     
@@ -53,6 +76,7 @@ class DBGraph(gg.GenGraph):
 
         
     def check_id(self, vert):
+    
         return self.users.c.user_id == vert
     
     def get_rank(self, vert):
@@ -68,6 +92,7 @@ class DBGraph(gg.GenGraph):
 
         
     def count_neighbors(self, vert, out=True, cond=False, less=True, cutoff=0):
+        """See :func:`graphtools.gengraph.GenGraph.count_neighbors`."""
  
         genstmt = select([func.count()]).select_from(self.users).select_from(self.arrows)
         if out:

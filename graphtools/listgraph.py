@@ -1,7 +1,20 @@
 import gengraph as gg
 
 class ListGraph(gg.GenGraph):
-    """A subclass of GenGraph for graphs given as a list of arrows."""
+    """
+    A subclass of GenGraph for graphs given as a list of arrows.
+    
+    Parameters
+    __________
+    
+    :param list arrows_list: a list of the arrows in the graph; each\
+    arrow is an ordered list of 2 vertices (any type) where the first\
+    vertex is the tail of the arrow and the second is the head.
+    
+    Graphs with isolated vertices (vertices with no neighbors) are not\
+    supported. Isolated vertices don't affect the hierarchy of the graph.  
+    
+    """
 
     def __init__(self, arrows_list):
         """Initialze the object."""
@@ -12,11 +25,10 @@ class ListGraph(gg.GenGraph):
         
         self.vert_list = self.get_vert_list()
         
+        #The rank dictionary; keys are the vertices 
+        #and values are the ranks.
         self.rankdict = {vert : 0 for vert in self.vert_list}
-        """
-        The rank dictionary; keys are the vertices 
-        and values are the ranks.
-        """
+
         
     def get_num_arrows(self):
         
@@ -36,12 +48,39 @@ class ListGraph(gg.GenGraph):
         self.rankdict[vert] = newrank
         
     def neighbors_out(self, vert):
-        """return the list of out neighbors of vertex vert."""
+        """Return the list of out neighbors of vertex *vert*.
+        
+        Parameters
+        __________
+        
+        :param vertex vert: the vertex to count the neighbors of
+        
+        Returns
+        _______
+        
+        :return: the number of out neighbors of *vert*
+        :rtype: int
+        
+        """
         
         return [a[1] for a in self.arrows_list if a[0] == vert]
 
     def neighbors_in(self, vert):
-        """return the list of in neighbors of vertex vert."""
+        """Return the list of in neighbors of vertex *vert*.
+        
+        Parameters
+        __________
+        
+        :param vertex vert: the vertex to count the neighbors of
+        
+        Returns
+        _______
+        
+        :return: the number of in neighbors of *vert*
+        :rtype: int
+        
+        """
+
         
         return [a[0] for a in self.arrows_list if a[1] == vert]
 
