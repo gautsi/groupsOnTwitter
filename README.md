@@ -1,6 +1,5 @@
 groupsOnTwitter
 ===============
 
-A package of tools to measure hierarchy in directed graphs. See the `documentation`_.
+A package of tools to measure hierarchy in directed graphs. See the [documentation](docs/graphtools.pdf).
 
-.. _`documentation`: https://github.com/gautsi/groupsOnTwitter/tree/master/docs
