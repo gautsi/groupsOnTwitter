@@ -29,6 +29,8 @@
 
 \begin{itemize}
 \item Migrate to MySQL, server
+\item Gephi script
+\item How well does the rank correlate to number of followers?
 \end{itemize}
 
 
@@ -81,7 +83,7 @@ h(G) := 1 - (1/m)A(G).
 $$
 \end{defn}
 
-By \cite{hier1}, $A(G)$ is at most $m$, so $0 \leq h(G) \leq m$. Also, \cite{hier1} gives an $O(m^2n)$ algorithm for computing $h(G)$ and a optimal ranking, namely a ranking $r \in R(G)$ such that $h(r) = h(G)$.
+By \cite{hier1}, $A(G)$ is at most $m$, so $0 \leq h(G) \leq 1$. Also, \cite{hier1} gives an $O(m^2n)$ algorithm for computing $h(G)$ and a optimal ranking, namely a ranking $r \in R(G)$ such that $h(r) = h(G)$.
 
 \subsection{Issues with \cite{hier1}} 
 \begin{enumerate}
@@ -127,7 +129,7 @@ Here's another approach to finding a good ranking. Given two vertices $u$ and $v
 \begin{thebibliography}{4}
 
 
-\bibitem{hier1} M. Gupte, P. Shankar, J. Li, S. Muthukrishnan, L. Iftode, {\it Social hierarchy in directed online social networks.}
+\bibitem{hier1} M. Gupte, P. Shankar, J. Li, S. Muthukrishnan, L. Iftode, {\it Finding hierarchy in directed online social networks.}
 
 
 \end{thebibliography}
