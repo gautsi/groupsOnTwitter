@@ -6,7 +6,7 @@
 Welcome to Groups on Twitter's documentation!
 =============================================
 
-Contents:asd
+Contents:
 
 .. toctree::
    :maxdepth: 4
