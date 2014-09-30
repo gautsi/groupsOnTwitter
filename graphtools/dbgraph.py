@@ -1,6 +1,5 @@
 import gengraph as gg
-from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, func, create_engine
-from sqlalchemy.sql import select
+from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, func, create_engine, sql
 
 def make_db(arrows_list, name=None):
     """
@@ -165,13 +164,13 @@ class DBGraph(gg.GenGraph):
 
     def get_num_arrows(self):
         
-        countarrows = select([func.count()]).select_from(self.arrows).where(self.acheckgroup)
+        countarrows = sql.select([func.count()]).select_from(self.arrows).where(self.acheckgroup)
         result = self.conn.execute(countarrows)
         return result.fetchone()[0]
         
     def get_vert_list(self):
         
-        getuserids = select([self.users.c.user_id]).where(self.ucheckgroup)
+        getuserids = sql.select([self.users.c.user_id]).where(self.ucheckgroup)
         results = self.conn.execute(getuserids)
         return [result[0] for result in results.fetchall()]
 
@@ -182,7 +181,7 @@ class DBGraph(gg.GenGraph):
     
     def get_rank(self, vert):
 
-        stmt = select([self.users.c.rank]).where((self.check_id(vert)) & (self.ucheckgroup))
+        stmt = sql.select([self.users.c.rank]).where((self.check_id(vert)) & (self.ucheckgroup))
         result = self.conn.execute(stmt)
         return result.fetchone()[0]
 
@@ -194,7 +193,7 @@ class DBGraph(gg.GenGraph):
         
     def count_neighbors(self, vert, out=True, cond=False, less=True, cutoff=0):
  
-        genstmt = select([func.count()]).select_from(self.users).select_from(self.arrows)
+        genstmt = sql.select([func.count()]).select_from(self.users).select_from(self.arrows)
         if out:
             inoutstmt = genstmt.where(self.arrows.c.follow_id == vert).where(self.users.c.user_id == self.arrows.c.lead_id)
         else:
