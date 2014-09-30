@@ -1,6 +1,5 @@
 import gengraph as gg
-from sqlalchemy.sql import select
-from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, func, create_engine
+from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, func, create_engine, select
 
 def make_db(arrows_list, name=None):
     """
