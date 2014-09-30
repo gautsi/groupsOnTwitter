@@ -18,10 +18,6 @@ def make_db(arrows_list, name=None):
     :returns: the users table, arrows table and database connection as two `sqlalchemy Table`_ objects and a `sqlalchemy Connection`_ object, respectively
     :rtype: tuple
     
-    .. _sqlalchemy Table: http://docs.sqlalchemy.org/en/rel_0_9/core/metadata.html#sqlalchemy.schema.Table
-        
-    .. _sqlalchemy Connection: http://docs.sqlalchemy.org/en/rel_0_9/core/connections.html?highlight=connection#sqlalchemy.engine.Connection
-    
     For example,
     
     >>> from graphtools.dbgraph import make_db
@@ -33,6 +29,10 @@ def make_db(arrows_list, name=None):
     >>> result = conn.execute(select([arrows]))
     >>> result.fetchall()
     [(1, 1, 2), (2, 2, 3)]
+    
+    .. _sqlalchemy Table: http://docs.sqlalchemy.org/en/rel_0_9/core/metadata.html#sqlalchemy.schema.Table
+        
+    .. _sqlalchemy Connection: http://docs.sqlalchemy.org/en/rel_0_9/core/connections.html?highlight=connection#sqlalchemy.engine.Connection
     
     """
     
