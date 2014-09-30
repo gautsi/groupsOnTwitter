@@ -33,7 +33,7 @@ class Mock(object):
         else:
             return Mock()
 
-MOCK_MODULES = ['numpy', 'scipy', 'matplotlib', 'sqlalchemy']
+MOCK_MODULES = ['numpy', 'scipy', 'matplotlib', 'sqlalchemy.sql', 'sqlalchemy']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = Mock()
 
