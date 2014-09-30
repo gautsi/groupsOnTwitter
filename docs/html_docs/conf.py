@@ -290,4 +290,4 @@ texinfo_documents = [
 
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'http://docs.python.org/': None, 'http://www.sagemath.org/doc/reference/graphs/' : None}
+intersphinx_mapping = {'http://docs.python.org/': None, 'http://www.sagemath.org/doc/reference/graphs/' : None, 'http://docs.sqlalchemy.org/en/rel_0_9/' : None}
