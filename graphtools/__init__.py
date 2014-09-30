@@ -5,7 +5,7 @@ This package includes :class:`graphtools.gengraph.GenGraph`, a superclass implem
 * :class:`graphtools.sagegraph.SageGraph` wraps a ``sage.graphs.digraph.DiGraph`` object, and
 * :class:`graphtools.listgraph.ListGraph` reads graph data stored as a list of arrows.
 
-Multiple types for the vertices are supported. The type *vertex* refers to the instance-specific type of the vertices.
+Multiple types for the vertices are supported. The type *vertextype* refers to the instance-specific type of the vertices.
 
 """
 

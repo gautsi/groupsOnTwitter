@@ -77,7 +77,7 @@ class ListGraph(gg.GenGraph):
         Parameters
         __________
         
-        :param vertex vert: the vertex to get the neighbors of
+        :param vertextype vert: the vertex to get the neighbors of
         
         Returns
         _______
@@ -102,7 +102,7 @@ class ListGraph(gg.GenGraph):
         Parameters
         __________
         
-        :param vertex vert: the vertex to get the neighbors of
+        :param vertextype vert: the vertex to get the neighbors of
         
         Returns
         _______

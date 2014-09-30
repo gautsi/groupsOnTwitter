@@ -74,7 +74,7 @@ class GenGraph(object):
         Parameters
         __________
         
-        :param vertex vert: the vertex to get the rank of
+        :param vertextype vert: the vertex to get the rank of
 
         Returns
         _______
@@ -93,7 +93,7 @@ class GenGraph(object):
         Parameters
         __________
         
-        :param vertex vert: the vertex to set the rank of
+        :param vertextype vert: the vertex to set the rank of
         
         :param int newrank: the new rank of *vert* 
         
@@ -109,7 +109,7 @@ class GenGraph(object):
         Parameters
         __________
         
-        :param vertex vert: the vertex to count the neighbors of 
+        :param vertextype vert: the vertex to count the neighbors of 
         
         :param bool out: if True, count out neighbors, else in
                 
@@ -162,7 +162,7 @@ class GenGraph(object):
         Parameters
         __________
 
-        :param vertex vert: the vertex whose rank may change
+        :param vertextype vert: the vertex whose rank may change
         
         :param bool debug: if True, verbose output
         

@@ -16,8 +16,12 @@ def make_db(arrows_list, name=None):
     Returns
     _______
     
-    :returns: the users table, arrows table and database connection as two sqlalchemy.schema.Table objects and a sqlalchemy.engine.base.Connection object, respectively
+    :returns: the users table, arrows table and database connection as two `sqlalchemy Table`_ objects and a `sqlalchemy Connection`_ object, respectively
     :rtype: tuple
+    
+    .. _sqlalchemy Table: http://docs.sqlalchemy.org/en/rel_0_9/core/metadata.html#sqlalchemy.schema.Table
+        
+    .. _sqlalchemy Connection: http://docs.sqlalchemy.org/en/rel_0_9/core/connections.html?highlight=connection#sqlalchemy.engine.Connection
     
     For example,
     
@@ -100,9 +104,9 @@ class DBGraph(gg.GenGraph):
     
     :param sqlalchemy.schema.Table arrows: the table of arrows, described above
     
-    :param sqlalchemy.engine.base.Connection conn: a connection to the database
+    :param sqlalchemy.engine.Connection conn: a connection to the database
     
-    :param any group: an optional identifier, described above
+    :param group: an optional identifier, described above
     
     The initializer sets all entries in **user**.\ *rank* to 0.
     
