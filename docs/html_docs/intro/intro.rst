@@ -50,12 +50,12 @@ _____________________
 Let :math:`G = (V,E)` be a directed graph and let :math:`r` be a ranking of :math:`G`. Pick a vertex :math:`v \in V`. Will updating :math:`r` by increasing or decreasing the rank of :math:`v` by 1 decrease the agony of :math:`r`? The change in agony if the rank of :math:`v` is increased by 1 is 
 
 .. math::
-   i(v) := \big|\{w \in V\ |\ v \to w \in E \ \text{ \& }\ r(w) \leq r(v) + 1\}\big| - \big|\{w \in V\ |\ w \to v \in E \text{ \& } r(w) \geq r(v)\}\big|
+   i(v) := \big|\{w \in V\ |\ v \to w \in E \ \& \ r(w) \leq r(v) + 1\}\big| - \big|\{w \in V\ |\ w \to v \in E \ \& \ r(w) \geq r(v)\}\big|
    
 while the change in agony if the rank of :math:`v` is decreased by 1 is 
 
 .. math::
-   i(v) := \big|\{w \in V\ |\ w \to v \in E \& r(w) \geq r(v) - 1\}\big| - \big|\{w \in V\ |\ v \to w \in E\ \& \ r(w) \leq r(v)\}\big|. 
+   i(v) := \big|\{w \in V\ |\ w \to v \in E\ \& \ r(w) \geq r(v) - 1\}\big| - \big|\{w \in V\ |\ v \to w \in E\ \& \ r(w) \leq r(v)\}\big|. 
    
 If :math:`i(v) \leq -1`, then increasing the rank of the vertex by 1 will decrease the agony of the ranking, as will decreasing the rank by 1 if :math:`d(v) \leq -1`.
 
