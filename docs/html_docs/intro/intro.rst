@@ -55,7 +55,7 @@ Let :math:`G = (V,E)` be a directed graph and let :math:`r` be a ranking of :mat
 while the change in agony if the rank of :math:`v` is decreased by 1 is 
 
 .. math::
-   i(v) := \big|\{w \in V\ |\ w \to v \in E \text{ \& } r(w) \geq r(v) - 1\}\big| - \big|\{w \in V\ |\ v \to w \in E\ \text{ \& }\ r(w) \leq r(v)\}\big|. 
+   i(v) := \big|\{w \in V\ |\ w \to v \in E \& r(w) \geq r(v) - 1\}\big| - \big|\{w \in V\ |\ v \to w \in E\ \& \ r(w) \leq r(v)\}\big|. 
    
 If :math:`i(v) \leq -1`, then increasing the rank of the vertex by 1 will decrease the agony of the ranking, as will decreasing the rank by 1 if :math:`d(v) \leq -1`.
 
