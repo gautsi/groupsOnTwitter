@@ -1,8 +1,6 @@
 import twittersearch as ts
 from twython import Twython
 
-
-
 twy = Twython(APP_KEY, APP_SECRET)	
 
 #getting the group from twitter

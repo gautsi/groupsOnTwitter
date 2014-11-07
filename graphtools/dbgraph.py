@@ -8,9 +8,9 @@ def make_db(arrows_list, name=None):
     Parameters
     __________
     
-    :param str name: the name of the database; if no name is given, the database will be in-memory-only
     
     :param list arrow_list: the arrows of the graph as a list of lists of two ints, the first int representing the tail of the arrow and the second the head.
+    :param str name: the name of the database; if no name is given, the database will be in-memory-only
     
     Returns
     _______
@@ -76,6 +76,31 @@ def make_db(arrows_list, name=None):
     conn.execute(arrows.insert(), arrow_values)
 
     return users, arrows, conn
+    
+    
+def get_tables(engine):
+    """
+    Get the tables and connections required for :class:`DBGraph` from a `sqlalchemy Engine`_ object.
+    
+    Parameters:
+    ___________
+    
+    :param sqlalchemy.engine.Engine engine: the database engine
+
+    Returns
+    _______
+    
+    :returns: the users table, arrows table and database connection as two `sqlalchemy Table`_ objects and a `sqlalchemy Connection`_ object, respectively
+    :rtype: tuple
+    
+    .. _sqlalchemy Table: http://docs.sqlalchemy.org/en/rel_0_9/core/metadata.html#sqlalchemy.schema.Table
+        
+    .. _sqlalchemy Engine: http://docs.sqlalchemy.org/en/rel_0_9/core/connections.html#sqlalchemy.engine.Engine
+
+    .. _sqlalchemy Connection: http://docs.sqlalchemy.org/en/rel_0_9/core/connections.html#sqlalchemy.engine.Connection
+    
+    """
+    pass    
     
 
 class DBGraph(gg.GenGraph):
