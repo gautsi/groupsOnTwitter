@@ -15,13 +15,13 @@ def make_db(arrows_list, name=None):
     Returns
     _______
     
-    :returns: the users table, arrows table and database connection as two `sqlalchemy Table`_ objects and a `sqlalchemy Connection`_ object, respectively
+    :returns: the users table, arrows table, database connection and engine as two `sqlalchemy Table`_ objects, a `sqlalchemy Connection`_ object, and a `sqlalchemy Engine`_ object, respectively
     :rtype: tuple
     
     For example,
     
     >>> from graphtools.dbgraph import make_db
-    >>> users, arrows, conn = make_db([[1, 2], [2, 3]])
+    >>> users, arrows, conn, eng = make_db([[1, 2], [2, 3]])
     >>> from sqlalchemy.sql import select
     >>> result = conn.execute(select([users]))
     >>> result.fetchall()
@@ -32,7 +32,9 @@ def make_db(arrows_list, name=None):
     
     .. _sqlalchemy Table: http://docs.sqlalchemy.org/en/rel_0_9/core/metadata.html#sqlalchemy.schema.Table
         
-    .. _sqlalchemy Connection: http://docs.sqlalchemy.org/en/rel_0_9/core/connections.html?highlight=connection#sqlalchemy.engine.Connection
+    .. _sqlalchemy Connection: http://docs.sqlalchemy.org/en/rel_0_9/core/connections.html#sqlalchemy.engine.Connection
+    
+    .. _sqlalchemy Engine: http://docs.sqlalchemy.org/en/rel_0_9/core/connections.html#sqlalchemy.engine.Engine
     
     """
     
@@ -75,10 +77,12 @@ def make_db(arrows_list, name=None):
      
     conn.execute(arrows.insert(), arrow_values)
 
-    return users, arrows, conn
+    return users, arrows, conn, engine
     
+#make a test table
+testusers, testarrows, testconn, testeng = make_db([[1, 2], [2, 3]])
     
-def get_tables(engine):
+def get_tables(engine, userstablename='users', arrowstablename='arrows'):
     """
     Get the tables and connections required for :class:`DBGraph` from a `sqlalchemy Engine`_ object.
     
@@ -86,12 +90,28 @@ def get_tables(engine):
     ___________
     
     :param sqlalchemy.engine.Engine engine: the database engine
+    
+    :param str userstablename: the name of the users table
+    
+    :param str arrowstablename: the name of the arrows table
 
     Returns
     _______
     
     :returns: the users table, arrows table and database connection as two `sqlalchemy Table`_ objects and a `sqlalchemy Connection`_ object, respectively
     :rtype: tuple
+    
+    For example,
+    
+    >>> from graphtools.dbgraph import testeng, get_tables
+    >>> users, arrows, conn = get_tables(testeng)
+    >>> from sqlalchemy.sql import select
+    >>> result = conn.execute(select([users]))
+    >>> result.fetchall()
+    [(1, 0), (2, 0), (3, 0)]
+    >>> result = conn.execute(select([arrows]))
+    >>> result.fetchall()
+    [(1, 1, 2), (2, 2, 3)]
     
     .. _sqlalchemy Table: http://docs.sqlalchemy.org/en/rel_0_9/core/metadata.html#sqlalchemy.schema.Table
         
@@ -100,7 +120,18 @@ def get_tables(engine):
     .. _sqlalchemy Connection: http://docs.sqlalchemy.org/en/rel_0_9/core/connections.html#sqlalchemy.engine.Connection
     
     """
-    pass    
+    
+    meta = MetaData()
+
+    meta.reflect(bind=engine)
+
+    users = meta.tables[userstablename]
+
+    arrows = meta.tables[arrowstablename]
+
+    conn = engine.connect()   
+    
+    return users, arrows, conn  
     
 
 class DBGraph(gg.GenGraph):
@@ -137,7 +168,7 @@ class DBGraph(gg.GenGraph):
     For example,
     
     >>> from graphtools.dbgraph import make_db, DBGraph
-    >>> users, arrows, conn = make_db([[1, 2], [2, 3]])
+    >>> users, arrows, conn, eng = make_db([[1, 2], [2, 3]])
     >>> graph = DBGraph(users=users, arrows=arrows, conn=conn)
     >>> print graph.get_num_arrows()
     2

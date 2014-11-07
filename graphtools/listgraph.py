@@ -87,6 +87,8 @@ class ListGraph(gg.GenGraph):
         
         For example,
         
+        >>> from graphtools.listgraph import ListGraph
+        >>> graph = ListGraph([['a', 'b'], ['b', 'c']])
         >>> graph.neighbors_out('a')
         ['b']
         >>> graph.neighbors_out('c')
@@ -112,6 +114,8 @@ class ListGraph(gg.GenGraph):
         
         For example,
         
+        >>> from graphtools.listgraph import ListGraph
+        >>> graph = ListGraph([['a', 'b'], ['b', 'c']])        
         >>> graph.neighbors_in('a')
         []
         >>> graph.neighbors_in('c')
